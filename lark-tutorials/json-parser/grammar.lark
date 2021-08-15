@@ -1,3 +1,5 @@
+// Prepended ? inlines if matched with one child only.
+// Any of these can appear as a "value" in JSON.
 ?value: dict
     | list
     | string
@@ -6,16 +8,20 @@
     | "false" -> false
     | "null" -> null
 
+// One or more elements, comma-separated.
 list: "[" [value ("," value)*] "]"
 
+// One or more pairs, comma-separated.
 dict: "{" [pair ("," pair)*] "}"
 
 pair: string ":" value
 
 string: ESCAPED_STRING
 
+// Import terminal from file 
 %import common.ESCAPED_STRING
 %import common.SIGNED_NUMBER
 
+// Ignore whitespaces (JSON is whitespace-independent)
 %import common.WS
 %ignore WS
