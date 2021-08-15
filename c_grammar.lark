@@ -1,20 +1,31 @@
+// Terminals
+
 TYPE: "int" 
     | "float" 
     | "char"
 
-end_stmt: ";"
+END_STMT: ";"
 
-var_decl: TYPE " " VAR_NAME end_stmt
+// Rules
+var_decl: TYPE " " VAR_NAME END_STMT
 
-VAR_NAME: /[A-Za-z_][\w_]*/
+var_assign: VAR_NAME "=" rvalue END_STMT
+
+// rvalues can be anything. The compiler will determine whether the rvalue is valid.
+rvalue: ESCAPED_STRING | SIGNED_INT | SIGNED_NUMBER | VAR_NAME
 
 // A statement could be one of many things.
 stmt: var_decl
+    | var_assign
 
 // Top-level: C files contain multiple statements.
 start: stmt*
 
-%ignore WS  // Ignore whitespace
+%import common (WS, NEWLINE, C_COMMENT, CPP_COMMENT) // For ignores
+%ignore WS  // Ignore general whitespace
 %ignore C_COMMENT // Ignore /* comments like this */
 %ignore CPP_COMMENT  // Ignore // inline comments like this
-%import common (WS, NEWLINE, C_COMMENT, CPP_COMMENT)
+
+// Other terminals utilized above
+%import common (ESCAPED_STRING, SIGNED_INT, SIGNED_NUMBER)
+%import common.CNAME -> VAR_NAME  // C variable naming convention

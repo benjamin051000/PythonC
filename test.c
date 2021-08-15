@@ -14,3 +14,9 @@ multiline
 comment.
 */
 int b;
+b = 5;
+a = 4.0;
+c = .3;
+d = -123;
+e = "hello";
+f = e;
