@@ -1,0 +1,20 @@
+TYPE: "int" 
+    | "float" 
+    | "char"
+
+end_stmt: ";"
+
+var_decl: TYPE " " VAR_NAME end_stmt
+
+VAR_NAME: /[A-Za-z_][\w_]*/
+
+// A statement could be one of many things.
+stmt: var_decl
+
+// Top-level: C files contain multiple statements.
+start: stmt*
+
+%ignore WS  // Ignore whitespace
+%ignore C_COMMENT // Ignore /* comments like this */
+%ignore CPP_COMMENT  // Ignore // inline comments like this
+%import common (WS, NEWLINE, C_COMMENT, CPP_COMMENT)
