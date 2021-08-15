@@ -1,6 +1,28 @@
 import unittest
 from lark import Lark
 
+def interactive():
+    """ Interactive mode. Creates a REPL in the terminal. """
+    # Set up parser
+    parser = Lark.open('c_grammar.lark')
+    print('Welcome to interactive mode. Type Ctrl+C to quit.')
+
+    while True:
+        try:
+            user_input = input('>')
+        except KeyboardInterrupt:
+            break
+        
+        # Run
+        try:
+            tree = parser.parse(user_input)
+        except Exception as e:
+            print(e)
+        
+        else:
+            # Print result
+            print(tree.pretty())
+
 class ParserTests(unittest.TestCase):
     def setUp(self):
         self.parser = Lark.open('c_grammar.lark')
@@ -12,4 +34,5 @@ class ParserTests(unittest.TestCase):
         print(tree.pretty())
 
 if __name__ == '__main__':
-    unittest.main()
+    # unittest.main()
+    interactive()
