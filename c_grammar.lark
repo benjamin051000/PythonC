@@ -1,25 +1,36 @@
 // Terminals
 
-TYPE: "int" 
-    | "float" 
-    | "char"
+TYPE: "int" | "float" | "char"
 
 END_STMT: ";"
+
+// Two-operand operators (left and right sides)
+// TODO order of operations
+ARITH_OP: "+" | "-" | "*" | "/" | "%"
+RELATIONAL_OP: "==" | "!=" | "<" | ">" | "<=" | ">="
+LOGICAL_OP: "&&" | "||" | "!"
+BITWISE_OP: "|" | "&" | "^" | "<<" | ">>"
+ASSIGN_OP: "=" | "+=" | "-=" | "*=" | "/=" | "%=" | "<<=" | ">>=" | "&=" | "^=" | "|="
+
+// General Terminal for all Left-Right operators
+LR_OPERATOR: ARITH_OP | RELATIONAL_OP | LOGICAL_OP | BITWISE_OP
 
 // Rules
 var_decl: TYPE " " VAR_NAME END_STMT
 
-var_assign: VAR_NAME "=" rvalue END_STMT
+var_assign: VAR_NAME ASSIGN_OP expression END_STMT
 
 var_compound_decl_assign: TYPE " " var_assign
 
-// rvalues can be anything. The compiler will determine whether the rvalue is valid.
-rvalue: ESCAPED_STRING | SIGNED_INT | SIGNED_NUMBER | VAR_NAME
+// expressions can be anything. The compiler will determine whether the rvalue is valid.
+expression: ESCAPED_STRING | SIGNED_INT | SIGNED_NUMBER | VAR_NAME |  (expression LR_OPERATOR expression)
 
 // A statement could be one of many things.
 stmt: var_decl
     | var_assign
     | var_compound_decl_assign
+    | expression END_STMT  // Why this is in ANSI C? Who knows.
+    | END_STMT
 
 // Top-level: C files contain multiple statements.
 start: stmt*
