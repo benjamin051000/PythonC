@@ -7,7 +7,7 @@
 """
 from lark import Lark, Transformer
 
-with open("./grammar.ebnf", "r") as f:
+with open("./grammar.lark", "r") as f:
     grammar = f.read()
 
 # The tree transformer has functions with names that match

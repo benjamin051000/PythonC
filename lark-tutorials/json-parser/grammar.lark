@@ -1,6 +1,6 @@
 // Prepended ? inlines if matched with one child only.
 // Any of these can appear as a "value" in JSON.
-?value: dict
+?value: dict 
     | list
     | string
     | SIGNED_NUMBER -> number
@@ -12,6 +12,7 @@
 list: "[" [value ("," value)*] "]"
 
 // One or more pairs, comma-separated.
+// dict also happens to be the top-level value in a JSON object, so this base case is covered.
 dict: "{" [pair ("," pair)*] "}"
 
 pair: string ":" value
