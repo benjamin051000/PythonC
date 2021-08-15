@@ -13,10 +13,10 @@ is a
 multiline
 comment.
 */
-int b;
+int b /*comment before semicolon!*/;
 b = 5;
-a = 4.0;
-c = .3;
-d = -123;
-e = "hello";
-f = e;
+a = b;
+
+// Compound declaration/assignment
+int f = 5;
+int /* 1 */ g /* 2 */ = /* 3 */ 555 /* haha */;
