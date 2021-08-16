@@ -10,23 +10,25 @@ ARITH_OP: "+" | "-" | "*" | "/" | "%"
 RELATIONAL_OP: "==" | "!=" | "<" | ">" | "<=" | ">="
 LOGICAL_OP: "&&" | "||" | "!"
 BITWISE_OP: "|" | "&" | "^" | "<<" | ">>"
+
 ASSIGN_OP: "=" | "+=" | "-=" | "*=" | "/=" | "%=" | "<<=" | ">>=" | "&=" | "^=" | "|="
 
 // General Terminal for all Left-Right operators
 LR_OPERATOR: ARITH_OP | RELATIONAL_OP | LOGICAL_OP | BITWISE_OP
 
 // Rules
-var_decl: TYPE " " VAR_NAME END_STMT
+var_decl: TYPE " " VAR_NAME
 
 var_assign: VAR_NAME ASSIGN_OP expression END_STMT
 
-var_compound_decl_assign: TYPE " " var_assign
+// Utilizing both var_decl and var_assign for the following statement makes both of those two messier, so some code repitition seems to go a long way here.
+var_compound_decl_assign: var_decl ASSIGN_OP expression END_STMT
 
 // expressions can be anything. The compiler will determine whether the rvalue is valid.
 expression: ESCAPED_STRING | SIGNED_INT | SIGNED_NUMBER | VAR_NAME |  (expression LR_OPERATOR expression)
 
 // A statement could be one of many things.
-stmt: var_decl
+stmt: var_decl END_STMT
     | var_assign
     | var_compound_decl_assign
     | expression END_STMT  // Why this is in ANSI C? Who knows.
